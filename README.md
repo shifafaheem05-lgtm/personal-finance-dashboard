@@ -2,6 +2,8 @@
 
 A web dashboard for tracking income and expenses, built with **Python, Streamlit, SQLite and pandas**. Add transactions, set monthly budgets, and see where your money goes with live charts.
 
+**[Live demo](https://personal-finance-dashboard-demo.streamlit.app)**
+
 ![Dashboard](assets/dashboard.png)
 
 ## Features

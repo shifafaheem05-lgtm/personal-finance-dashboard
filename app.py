@@ -69,7 +69,7 @@ with st.sidebar:
         except ValueError as exc:
             st.error(str(exc))
     st.download_button("Export CSV", store.export_csv(), "transactions.csv", "text/csv")
-    if st.button("Load demo data"):
+    if os.environ.get("DEMO_MODE") != "1" and st.button("Load demo data"):
         load_demo(store)
         st.success("Demo data loaded.")
 

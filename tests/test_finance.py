@@ -161,6 +161,7 @@ class AppSmokeTest(unittest.TestCase):
                 self.assertFalse(at.exception, at.exception)
                 self.assertGreaterEqual(len(at.metric), 4)  # demo data already loaded
                 self.assertFalse(os.path.exists(os.environ["FINANCE_DB"]))  # no shared file created
+                self.assertFalse(any(b.label == "Load demo data" for b in at.button))  # hidden: data is pre-loaded
         finally:
             os.environ.pop("DEMO_MODE", None)
 
