@@ -136,7 +136,7 @@ class AnalyticsTests(unittest.TestCase):
 class AppSmokeTest(unittest.TestCase):
     def test_app_renders_empty_and_with_data(self):
         from streamlit.testing.v1 import AppTest
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             os.environ["FINANCE_DB"] = os.path.join(tmp, "t.db")
             root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             at = AppTest.from_file(os.path.join(root, "app.py"), default_timeout=30).run()
@@ -149,6 +149,20 @@ class AppSmokeTest(unittest.TestCase):
             at = AppTest.from_file(os.path.join(root, "app.py"), default_timeout=30).run()
             self.assertFalse(at.exception, at.exception)
             self.assertGreaterEqual(len(at.metric), 4)
+
+    def test_demo_mode_is_private_and_prefilled(self):
+        from streamlit.testing.v1 import AppTest
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        os.environ["DEMO_MODE"] = "1"
+        try:
+            with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+                os.environ["FINANCE_DB"] = os.path.join(tmp, "never_used.db")
+                at = AppTest.from_file(os.path.join(root, "app.py"), default_timeout=30).run()
+                self.assertFalse(at.exception, at.exception)
+                self.assertGreaterEqual(len(at.metric), 4)  # demo data already loaded
+                self.assertFalse(os.path.exists(os.environ["FINANCE_DB"]))  # no shared file created
+        finally:
+            os.environ.pop("DEMO_MODE", None)
 
 
 if __name__ == "__main__":

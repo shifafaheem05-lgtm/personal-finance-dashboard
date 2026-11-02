@@ -12,7 +12,7 @@ A web dashboard for tracking income and expenses, built with **Python, Streamlit
 - **Budgets** – monthly limit per category with progress bars and over-budget warnings.
 - **CSV import and export** – invalid rows are skipped and reported instead of crashing.
 - **Input validation** – rejects negative amounts, invalid dates and unknown types.
-- **18 automated tests** covering storage, validation, analytics and an app smoke test.
+- **19 automated tests** covering storage, validation, analytics and an app smoke test.
 
 ## Getting Started
 

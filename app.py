@@ -12,8 +12,19 @@ st.set_page_config(page_title="Personal Finance Dashboard", page_icon="💰", la
 
 
 @st.cache_resource
-def get_store() -> TransactionStore:
+def _shared_store() -> TransactionStore:
     return TransactionStore(os.environ.get("FINANCE_DB", "finance.db"))
+
+
+def get_store() -> TransactionStore:
+    """Local use: one persistent finance.db.
+    Hosted demo (DEMO_MODE=1): a private in-memory database per visitor, pre-filled with demo data."""
+    if os.environ.get("DEMO_MODE") == "1":
+        if "store" not in st.session_state:
+            st.session_state["store"] = TransactionStore(":memory:")
+            load_demo(st.session_state["store"])
+        return st.session_state["store"]
+    return _shared_store()
 
 
 store = get_store()
